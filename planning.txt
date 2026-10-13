@@ -1,0 +1,146 @@
+================================================================================
+           LOCAL SELF-HOSTED AI HUB - PROJECT ROADMAP & ARCHITECTURE PLAN
+================================================================================
+
+PROJECT GOAL:
+A unified, self-hosted web interface and backend running locally that brings
+together:
+  1. Ollama LLM Text Chat (Llama 3.2, Mistral, Qwen, etc.)
+  2. Local Image Generation (Stable Diffusion / ComfyUI / diffusers)
+  3. Extensible Multi-Model & API Support (Local + optional external APIs)
+  4. Clean, responsive web UI with chat history and model controls
+
+--------------------------------------------------------------------------------
+1. SYSTEM ARCHITECTURE
+--------------------------------------------------------------------------------
+
+  +-------------------------------------------------------------+
+  |                        FRONTEND                             |
+  |   (HTML5 / CSS3 / Vanilla JS or lightweight framework)       |
+  |  - Chat window & conversation history                       |
+  |  - Model selector dropdown (fetched from backend)          |
+  |  - Image generation studio (prompt, resolution, preview)    |
+  |  - Settings & system prompt configuration                  |
+  +------------------------------+------------------------------+
+                                 | REST / SSE (Fetch API)
+                                 v
+  +-------------------------------------------------------------+
+  |                     BACKEND MIDDLEMAN                       |
+  |                    (Flask / pythoncode.py)                  |
+  |  - Port 5000 (with CORS enabled)                            |
+  |  - /api/models        -> List available Ollama models       |
+  |  - /ask-ollama        -> Text chat endpoint (streaming)     |
+  |  - /api/generate-img  -> Local image generation gateway    |
+  |  - /api/history       -> Saved chats & image gallery        |
+  +---------------+------------------------------+--------------+
+                  |                              |
+                  v                              v
+     +--------------------------+  +---------------------------+
+     |      OLLAMA SERVICE      |  |     IMAGE GEN ENGINE      |
+     |   http://localhost:11434 |  | ComfyUI / SD WebUI /      |
+     | (Llama 3.2, DeepSeek, etc)|  | PyTorch diffusers pipeline|
+     +--------------------------+  +---------------------------+
+
+
+--------------------------------------------------------------------------------
+2. CURRENT STATUS & GAP ANALYSIS
+--------------------------------------------------------------------------------
+
+[DONE]
+  - Basic Flask server template (`pythoncode.py`) with `/ask-ollama` route.
+  - Basic HTML boilerplate (`index.html`).
+  - Minimal CSS class (`style.css`).
+
+[GAPS TO FIX]
+  - Frontend:
+    * `index.html` currently has raw JavaScript outside of a `<script>` tag
+      and is missing input textboxes, send buttons, and a chat display area.
+    * No conversation memory / message history sent to Ollama (currently only
+      sends a single message instead of the ongoing conversation).
+    * No loading spinner or streaming response (user waits without feedback).
+  - Backend:
+    * Hardcoded model name (`llama3.2`) in `pythoncode.py`.
+    * No endpoint to list installed Ollama models.
+    * No image generation endpoint yet.
+  - Installation documentation:
+    * `HowToInstallStuff.txt` is currently empty.
+
+
+--------------------------------------------------------------------------------
+3. STEP-BY-STEP DEVELOPMENT PHASES
+--------------------------------------------------------------------------------
+
+PHASE 1: Core Chat Experience (Current Milestone)
+--------------------------------------------------
+  1.1 Fix Frontend Structure:
+      - Add a sidebar for chat sessions and settings.
+      - Add a main chat feed with user & AI bubble styles.
+      - Add a message input box with "Send" button and Enter key trigger.
+      - Add a model selector dropdown.
+  1.2 Upgrade Backend (`pythoncode.py`):
+      - Add route `/api/models` returning `ollama.list()` so dropdown auto-populates.
+      - Support multi-turn conversation context (accept array of messages).
+      - Add support for streaming responses (tokens appear as they are generated).
+  1.3 UI Polish:
+      - Clean dark mode theme in `style.css`.
+      - Markdown rendering support (code snippets, bold, lists in LLM responses).
+      - Auto-scroll to bottom of chat on new messages.
+
+PHASE 2: Local Image Generation Integration (Fooocus)
+--------------------------------------------
+  Located on your machine at:
+    C:\Users\Jacob\Documents\Usefull scripts\Fooocus_win64_2-5-0\Fooocus_win64_2-5-0\run.bat
+    Model detected: juggernautXL_v8Rundiffusion.safetensors (SDXL 7.1GB)
+
+  Integration Approaches:
+    - Option 1 (Direct via run.bat + Gradio Client):
+        Start Fooocus normally with run.bat (runs Gradio on port 7865).
+        Use `gradio_client` in Python to send generation tasks programmatically.
+    - Option 2 (Dedicated REST API via Fooocus-API):
+        Clone/download `Fooocus-API` which runs on FastAPI/port 8888.
+        Provides clean REST endpoints (POST /v1/generation/text-to-image)
+        and reuses your existing models and python_embeded without duplicating files.
+
+  2.2 Add Image Gen Tab in UI:
+      - Prompt input & Negative prompt input.
+      - Aspect ratio / resolution options (1152x896, 1024x1024, etc.).
+      - Style selections (Fooocus V2, Fooocus Enhance, etc.).
+      - Image gallery displaying past generations from Fooocus outputs.
+  2.3 Backend Image Route:
+      - Endpoint `/generate-image` in `pythoncode.py` that dispatches generation
+        requests to Fooocus and returns the generated image (or base64) to index.html.
+
+PHASE 3: Multimodal & Video Generation (SkyReels)
+----------------------------------------
+  3.1 Video Generation via SkyReels:
+      - Cloud API integration (https://skyreels.ai/) for Text-to-Video & Image-to-Video.
+      - Optional self-hosted models: SkyReels-V1 (Hunyuan-T2V), SkyReels-V2 (14B Diffusion Forcing),
+        or ComfyUI-SkyReels for local GPU rendering.
+      - Endpoint `/generate-video` in pythoncode.py supporting video prompt, ratio, and duration.
+  3.2 Vision Support:
+      - Upload image to chat and analyze it using vision models (e.g., `llama3.2-vision`).
+  3.3 Multi-Device & Network Access:
+      - Bound to 0.0.0.0 with automatic LAN IP reporting (Wi-Fi, Ethernet, Tailscale).
+  3.4 Hybrid / Fallback APIs:
+      - Optional API key input for cloud fallback when local GPU is busy.
+
+PHASE 4: Packaging & Usability
+-------------------------------
+  4.1 One-Click Launcher:
+      - Create `start.bat` to launch Ollama, start Flask backend, and open
+        the browser to `index.html` in one double-click.
+  4.2 Local Persistence:
+      - Save conversations to SQLite or a JSON file so chats persist across restarts.
+  4.3 Complete Documentation:
+      - Populate `HowToInstallStuff.txt` with exact install commands and
+        troubleshooting tips.
+
+
+--------------------------------------------------------------------------------
+4. IMMEDIATE NEXT ACTIONS
+--------------------------------------------------------------------------------
+  [X] 1. Built modern multi-tab UI in `index.html` (Chat, Fooocus Studio, Status).
+  [X] 2. Built complete responsive dark-theme design in `style.css`.
+  [X] 3. Upgraded `pythoncode.py` with dynamic models, health checks, and Fooocus route.
+  [X] 4. Created installers in setup/ and `start_webpage.py` launcher.
+================================================================================

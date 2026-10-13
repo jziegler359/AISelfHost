@@ -1,0 +1,63 @@
+================================================================================
+             INSTALLATION & ENVIRONMENT SETUP GUIDE
+================================================================================
+
+1. PREREQUISITES
+--------------------------------------------------------------------------------
+- Python 3.10+ (Check with: python --version)
+- Ollama installed (Download from: https://ollama.com/download)
+- Optional: NVIDIA GPU with CUDA drivers (for fast local AI inference)
+
+
+2. ONE-CLICK MASTER INSTALLER (RECOMMENDED)
+--------------------------------------------------------------------------------
+Simply double-click `General_Installer.bat`!
+This master script automatically:
+  1. Checks Python 3.12 (downloads and installs if missing).
+  2. Installs all pip packages (Flask, Flask-CORS, Ollama, Gradio-Client, Requests).
+  3. Checks/Installs Ollama for Windows.
+  4. Detects your local Fooocus installation and configures connection paths.
+     (Note: Fooocus uses its own self-contained python_embeded, so you do NOT need
+      multiple separate Python installations!).
+  5. Creates `start_hub.bat` so you can launch the backend and frontend in 1 click.
+
+
+3. OLLAMA SETUP & MODEL DOWNLOADS
+--------------------------------------------------------------------------------
+1. Ensure Ollama is running in your system tray or run:
+    ollama serve
+
+2. Pull the models you want to use:
+    # Lightweight general purpose model (fast and smart):
+    ollama pull llama3.2
+
+    # Coding focused models:
+    ollama pull qwen2.5-coder:7b
+
+    # Vision model (if you want image inputs):
+    ollama pull llama3.2-vision
+
+
+4. RUNNING THE PROJECT
+--------------------------------------------------------------------------------
+Step 1: Start the Python Backend
+    python pythoncode.py
+    (This starts your server at http://127.0.0.1:5000)
+
+Step 2: Open the Web Interface
+    Open index.html in your web browser (or right-click -> Open with Live Server / Browser).
+
+
+5. COMMON TROUBLESHOOTING
+--------------------------------------------------------------------------------
+- "Failed to fetch / CORS error":
+  Ensure Flask is running on port 5000 and flask-cors is installed.
+
+- "Connection refused to Ollama":
+  Make sure Ollama is running. Test it by opening http://127.0.0.1:11434 in your browser.
+  It should display "Ollama is running".
+
+- "Model not found":
+  Run `ollama list` in the command prompt to see installed model names and verify
+  it matches what is configured in `pythoncode.py`.
+================================================================================

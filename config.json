@@ -1,0 +1,7 @@
+{
+  "ollama_host": "http://127.0.0.1:11434",
+  "default_model": "llama3.2",
+  "fooocus_url": "http://127.0.0.1:7865",
+  "fooocus_dir": "C:\\Users\\Jacob\\Documents\\Usefull scripts\\Fooocus_win64_2-5-0\\Fooocus_win64_2-5-0",
+  "fooocus_output_dir": "C:\\Users\\Jacob\\Documents\\Usefull scripts\\Fooocus_win64_2-5-0\\Fooocus_win64_2-5-0\\Fooocus\\outputs"
+}
