@@ -4,27 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Local AI Hub</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+<!-- Should make more User freindly like color settings and stuff -->
   <!-- Top App Header -->
   <header>
     <div class="logo-area">
-      <div class="logo-icon">⚡</div>
       <div class="logo-text">
-        <h1>Local AI Hub</h1>
-        <p>Self-Hosted Chating, Image generations, and Video Generation</p>
+        <h1>Local AI Hoster Website</h1>
       </div>
     </div>
 
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
-      <button class="tab-btn active" onclick="switchTab('chat')">💬 Chat</button>
-      <button class="tab-btn" onclick="switchTab('image')">🎨 Image Studio</button>
-      <button class="tab-btn" onclick="switchTab('video')">🎬 Video Studio</button>
-      <button class="tab-btn" onclick="switchTab('settings')">⚙️ Status & Network</button>
-      <!-- could combine into one that just calls image generation and video as tools mabey also pottentially agentic work-->
+      <button class="tab-btn active" onclick="switchTab('chat')">Chat</button>
+      <button class="tab-btn" onclick="switchTab('settings')">Status</button> <!-- I suppose Ai thought this would be usefull can see it ig-->
     </nav>
 
     <!-- Connection Status Badge -->
@@ -40,7 +34,7 @@
     <!-- ============================================================= -->
     <!-- TAB 1: OLLAMA CHAT INTERFACE                                  -->
     <!-- ============================================================= -->
-    <section id="chat-tab" class="tab-content active">
+    <section id="chat-tab" class="tab-content active" style="display: flex; flex-direction: column; height: 100%;">
       <div class="chat-header-bar">
         <div class="model-selector-group">
           <label for="model-select">Active Model:</label>
@@ -50,10 +44,9 @@
           <button class="secondary-btn" onclick="pullModel()">＋ Pull</button>
           <button class="danger-btn" onclick="stopOllama()">■ Stop</button>
         </div>
-        <button class="clear-btn" onclick="clearChat()">Clear Chat</button>
       </div>
 
-      <div id="chat-container" class="chat-container">
+      <div id="chat-container" class="chat-container" style="flex: 1; overflow-y: auto;">
         <div id="welcome-banner" class="welcome-banner">
           <h2>Welcome to the chat, everything done on device</h2>
           <p>Type your promt and press enter</p>
@@ -62,119 +55,8 @@
 
       <div class="chat-input-area">
         <div class="input-box-wrapper">
-          <textarea id="user-input" placeholder="Type a message to Ollama... (Press Enter to send, Shift+Enter for new line)" rows="1"></textarea>
+          <textarea id="user-input" style="resize: none; min-height: 100px;" placeholder="Type a message to Ollama... (Press Enter to send, Shift+Enter for new line)" rows="5"></textarea>
           <button id="send-btn" class="send-btn" onclick="sendMessage()">Send</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================= -->
-    <!-- TAB 2: FOOOCUS IMAGE GENERATION STUDIO                        -->
-    <!-- ============================================================= -->
-    <section id="image-tab" class="tab-content">
-      <div class="image-controls">
-        <div class="control-group">
-          <label for="image-prompt">Image Prompt:</label>
-          <textarea id="image-prompt" rows="3" placeholder="A futuristic cyber city at sunset, neon lights, highly detailed, photorealistic..."></textarea>
-        </div>
-
-        <div class="control-group">
-          <label for="negative-prompt">Negative Prompt (What to avoid):</label>
-          <textarea id="negative-prompt" rows="2" placeholder="blurry, low quality, distorted, extra limbs, bad anatomy"></textarea>
-        </div>
-
-        <div class="control-group">
-          <label for="aspect-ratio">Aspect Ratio:</label>
-          <select id="aspect-ratio">
-            <option value="1152*896">1152 × 896 (Landscape)</option>
-            <option value="1024*1024">1024 × 1024 (Square)</option>
-            <option value="896*1152">896 × 1152 (Portrait)</option>
-            <option value="1280*768">1280 × 768 (Widescreen)</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label for="image-style">Style Preset:</label>
-          <select id="image-style">
-            <option value="Fooocus V2">Fooocus V2 (Balanced)</option>
-            <option value="Fooocus Enhance">Fooocus Enhance (Detailed)</option>
-            <option value="Fooocus Sharp">Fooocus Sharp (Ultra Clean)</option>
-            <option value="SAI Anime">Anime Style</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label for="performance-mode">Performance Mode:</label>
-          <select id="performance-mode">
-            <option value="Speed">Speed (Fast)</option>
-            <option value="Quality">Quality (High detail)</option>
-          </select>
-        </div>
-
-        <div class="generation-actions">
-          <button id="generate-btn" class="generate-img-btn" onclick="generateImage()">✨ Generate Image</button>
-          <button class="danger-btn" onclick="stopFooocus()">■ Stop Fooocus</button>
-        </div>
-      </div>
-
-      <div class="image-preview-area">
-        <div id="image-display-container">
-          <div class="image-placeholder">
-            <div class="image-placeholder-icon">🎨</div>
-            <h3>No Image Generated Yet</h3>
-            <p>Enter a prompt on the left and click "Generate Image" to create artwork using your local Fooocus engine.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================= -->
-    <!-- TAB 3: SKYREELS VIDEO GENERATION STUDIO                       -->
-    <!-- ============================================================= -->
-    <section id="video-tab" class="tab-content">
-      <div class="image-controls">
-        <div class="control-group">
-          <label for="video-prompt">Video Prompt:</label>
-          <textarea id="video-prompt" rows="3" placeholder="A cinematic drone shot flying through a neon futuristic metropolis, 4k cinematic lighting..."></textarea>
-        </div>
-
-        <div class="control-group">
-          <label for="video-ratio">Aspect Ratio:</label>
-          <select id="video-ratio">
-            <option value="16:9">16:9 (Landscape HD)</option>
-            <option value="9:16">9:16 (Vertical / Mobile)</option>
-            <option value="1:1">1:1 (Square)</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label for="video-duration">Duration:</label>
-          <select id="video-duration">
-            <option value="5">5 Seconds</option>
-            <option value="10">10 Seconds</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label for="skyreels-key">SkyReels API Key (Optional if set in environment):</label>
-          <input type="text" id="skyreels-key" placeholder="skyreels_api_key_here">
-          <small style="color: var(--text-muted); font-size: 11px; margin-top: 4px;">
-            Get key at <a href="https://skyreels.ai" target="_blank" style="color: var(--accent-blue);">skyreels.ai</a> or run locally via ComfyUI-SkyReels.
-          </small>
-        </div>
-
-        <button id="generate-video-btn" class="generate-img-btn" onclick="generateVideo()" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
-          🎬 Generate Video (SkyReels)
-        </button>
-      </div>
-
-      <div class="image-preview-area">
-        <div id="video-display-container">
-          <div class="image-placeholder">
-            <div class="image-placeholder-icon">🎬</div>
-            <h3>No Video Generated Yet</h3>
-            <p>Enter a prompt and click "Generate Video" to create cinematic AI video clips powered by SkyReels.</p>
-          </div>
         </div>
       </div>
     </section>
@@ -194,30 +76,25 @@
             <div class="status-card-title">Ollama Service</div>
             <div id="ollama-status" class="status-card-value">Checking...</div>
           </div>
-          <div class="status-card">
-            <div class="status-card-title">Fooocus SDXL Engine</div>
-            <div id="fooocus-status" class="status-card-value">Checking...</div>
-          </div>
         </div>
       </div>
 
       <div class="settings-card">
         <h3>Network & Multi-Device Access</h3>
         <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">
-          Other devices on your Wi-Fi, local network, or Tailscale can open this page directly:
+          Other devices on your Wi-Fi can open this page:
         </p>
         <div id="network-ips-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
           <div style="font-size: 13px; color: var(--text-muted);">Detecting network IP addresses...</div>
         </div>
-        <button class="clear-btn" onclick="checkAllStatuses()">🔄 Re-check All Services</button>
+        <button class="clear-btn" onclick="checkAllStatuses()"> Re-check All Services</button>
       </div>
 
       <div class="settings-card">
         <h3>How to Start Services</h3>
         <ul style="font-size: 13px; color: var(--text-secondary); line-height: 1.8; margin-left: 20px;">
           <li><strong>Backend Hub:</strong> Run <code>python start_webpage.py</code> in the project folder.</li>
-          <li><strong>Ollama:</strong> Starts automatically in Windows, or run <code>ollama serve</code>.</li>
-          <li><strong>SkyReels Video Gen:</strong> Access via cloud API key or local model weights on HuggingFace.</li>
+          <li><strong>Ollama:</strong> Starts automatically in Windows, or in your terminal run <code>ollama serve</code>.</li>
         </ul>
       </div>
     </section>
@@ -226,98 +103,83 @@
 
   <!-- Client-side Logic -->
   <script>
-    // Automatically use the host IP/domain if accessed from a phone or other computer!
     const BACKEND_URL = window.location.origin.startsWith('http')
       ? window.location.origin
       : "http://127.0.0.1:5000";
-
+//crazy
     // -------------------------------------------------------------
     // Tab Navigation
     // -------------------------------------------------------------
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+        content.style.display = 'none';
+      });
 
       if (tabName === 'chat') {
         document.querySelectorAll('.tab-btn')[0].classList.add('active');
-        document.getElementById('chat-tab').classList.add('active');
-      } else if (tabName === 'image') {
-        document.querySelectorAll('.tab-btn')[1].classList.add('active');
-        document.getElementById('image-tab').classList.add('active');
-      } else if (tabName === 'video') {
-        document.querySelectorAll('.tab-btn')[2].classList.add('active');
-        document.getElementById('video-tab').classList.add('active');
+        const chatTab = document.getElementById('chat-tab');
+        chatTab.classList.add('active');
+        chatTab.style.display = 'flex';
       } else if (tabName === 'settings') {
-        document.querySelectorAll('.tab-btn')[3].classList.add('active');
-        document.getElementById('settings-tab').classList.add('active');
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        const settingsTab = document.getElementById('settings-tab');
+        settingsTab.classList.add('active');
+        settingsTab.style.display = 'block';
         checkAllStatuses();
       }
     }
+
+    switchTab('chat');
 
     // -------------------------------------------------------------
     // Chat Functions
     // -------------------------------------------------------------
     const chatContainer = document.getElementById('chat-container');
     const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
     const modelSelect = document.getElementById('model-select');
     const catalogModelSelect = document.getElementById('catalog-model-select');
     let hasMessages = false;
     let modelRefreshTimer;
 
     async function refreshModels() {
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/models`);
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error);
-        const previous = modelSelect.value;
-        modelSelect.innerHTML = data.models.length
-          ? data.models.map(m => `<option value="${m.name}">${m.name}${m.size ? ` (${m.size})` : ''}</option>`).join('')
-          : '<option value="">No models installed</option>';
-        if (data.models.some(m => m.name === previous)) modelSelect.value = previous;
-      } catch (err) {
-        modelSelect.innerHTML = '<option value="">Ollama unavailable</option>';
-      }
+      const data = await (await fetch(`${BACKEND_URL}/api/models`)).json();
+      modelSelect.innerHTML = data.models.map(m => `<option value="${m.name}">${m.name}${m.size ? ` (${m.size})` : ''}</option>`).join('');
     }
 
     // Populate the pull menu from Ollama's official model library.
     async function loadModelCatalog() {
-      try {
-        const data = await (await fetch(`${BACKEND_URL}/api/model-catalog`)).json();
-        catalogModelSelect.innerHTML = '<option value="">Choose a model to pull...</option>' +
-          data.models.map(name => `<option value="${name}">${name}</option>`).join('');
-      } catch (err) { catalogModelSelect.innerHTML = '<option value="">Catalog unavailable</option>'; }
+      const data = await (await fetch(`${BACKEND_URL}/api/model-catalog`)).json();
+      catalogModelSelect.innerHTML = '<option value="">Choose a model to pull...</option>' +
+        data.models.map(name => `<option value="${name}">${name}</option>`).join('');
     }
 
     // Stop only an Ollama server that this web app started itself.
     async function stopOllama() {
       const res = await fetch(`${BACKEND_URL}/api/ollama/stop`, { method: 'POST' });
       const data = await res.json();
-      appendMessage('ai', data.message || `⚠️ ${data.error}`);
-      refreshModels();
+      appendMessage('ai', data.message);
+      refreshModels(); 
     }
 
     // Start a non-blocking pull and poll until the model is ready.
     async function pullModel() {
       const input = catalogModelSelect;
       const model = input.value.trim();
-      if (!model) return;
       input.disabled = true;
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/models/pull`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({model}) });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
-        appendMessage('ai', `⬇️ Pulling ${model}...`);
-        modelRefreshTimer = setInterval(async () => {
-          const status = await (await fetch(`${BACKEND_URL}/api/models/pull/${data.job_id}`)).json();
-          if (status.progress) console.info(`[Ollama] ${status.progress}`);
-          if (status.status === 'done' || status.status === 'failed') {
-            clearInterval(modelRefreshTimer); input.disabled = false; input.value = '';
-            appendMessage('ai', status.status === 'done' ? `✅ ${model} is ready.` : `⚠️ Pull failed: ${status.error}`);
-            if (status.status === 'done') refreshModels();
-          }
-        }, 1000);
-      } catch (err) { input.disabled = false; appendMessage('ai', `⚠️ ${err.message}`); }
+      const res = await fetch(`${BACKEND_URL}/api/models/pull`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({model}) });
+      const data = await res.json();
+      appendMessage('ai', `⬇️ Pulling ${model}...`);
+      modelRefreshTimer = setInterval(async () => {
+        const status = await (await fetch(`${BACKEND_URL}/api/models/pull/${data.job_id}`)).json();
+        if (status.progress) console.info(`[Ollama] ${status.progress}`);
+        if (status.status === 'done' || status.status === 'failed') {
+          clearInterval(modelRefreshTimer); input.disabled = false; input.value = '';
+          appendMessage('ai', status.status === 'done' ? `✅ ${model} is ready.` : `⚠️ Pull failed: ${status.error}`);
+          if (status.status === 'done') refreshModels();
+        }
+      }, 1000);
     }
 
     refreshModels();
@@ -329,11 +191,6 @@
         sendMessage();
       }
     });
-
-    function sendQuickPrompt(promptText) {
-      userInput.value = promptText;
-      sendMessage();
-    }
 
     function appendMessage(sender, text) {
       const welcomeBanner = document.getElementById('welcome-banner');
@@ -347,7 +204,7 @@
 
       const avatar = document.createElement('div');
       avatar.className = 'avatar';
-      avatar.textContent = sender === 'user' ? '👤' : '⚡';
+      avatar.textContent = sender === 'user' ? 'You:' : 'AI:';
 
       const bubble = document.createElement('div');
       bubble.className = 'bubble';
@@ -367,7 +224,7 @@
 
       const avatar = document.createElement('div');
       avatar.className = 'avatar';
-      avatar.textContent = '⚡';
+      avatar.textContent = 'AI:'; 
 
       const bubble = document.createElement('div');
       bubble.className = 'bubble';
@@ -388,269 +245,51 @@
 
     async function sendMessage() {
       const text = userInput.value.trim();
-      if (!text) return;
 
       appendMessage('user', text);
       userInput.value = '';
-      sendBtn.disabled = true;
 
       const loadingRow = appendLoadingIndicator();
 
-      try {
-        // Ollama starts lazily here, keeping the app lightweight until chat is used.
-        const startResponse = await fetch(`${BACKEND_URL}/api/ollama/start`, { method: 'POST' });
-        if (!startResponse.ok) {
-          const startData = await startResponse.json();
-          throw new Error(startData.error || 'Could not start Ollama');
-        }
-        const response = await fetch(`${BACKEND_URL}/ask-ollama`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: text,
-            model: modelSelect.value
-          })
-        });
-
-        const data = await response.json();
-        loadingRow.remove();
-
-        if (response.ok && data.reply) {
-          appendMessage('ai', data.reply);
-        } else {
-          appendMessage('ai', `⚠️ Error from Ollama: ${data.error || 'Unknown error occurred.'}`);
-        }
-      } catch (err) {
-        loadingRow.remove();
-        appendMessage('ai', `⚠️ Could not reach server at ${BACKEND_URL}.\nMake sure pythoncode.py is running:\n  python start_webpage.py`);
-      } finally {
-        sendBtn.disabled = false;
-        userInput.focus();
-      }
+      await fetch(`${BACKEND_URL}/api/ollama/start`, { method: 'POST' });
+      const response = await fetch(`${BACKEND_URL}/ask-ollama`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, model: modelSelect.value })
+      });
+      const data = await response.json();
+      loadingRow.remove();
+      appendMessage('ai', data.reply);
+      userInput.focus();
     }
+    //Network Check
 
-    function clearChat() {
-      chatContainer.innerHTML = `
-        <div id="welcome-banner" class="welcome-banner">
-          <h2>Welcome to your Local AI Hub!</h2>
-          <p>Your models run 100% private and locally on your machine via Ollama. Select a prompt below or type your own to begin.</p>
-          <div class="suggestion-chips">
-            <button class="chip" onclick="sendQuickPrompt('Write a clean Python script that parses JSON from a file.')">🐍 Python JSON script</button>
-            <button class="chip" onclick="sendQuickPrompt('Explain how local LLMs and Ollama work in simple terms.')">🧠 Explain Local AI</button>
-            <button class="chip" onclick="sendQuickPrompt('Help me brainstorm creative ideas for a web project.')">💡 Brainstorm ideas</button>
-          </div>
-        </div>
-      `;
-      hasMessages = false;
-    }
-
-    // -------------------------------------------------------------
-    // Fooocus Image Generation
-    // -------------------------------------------------------------
-    async function generateImage() {
-      const prompt = document.getElementById('image-prompt').value.trim();
-      const negativePrompt = document.getElementById('negative-prompt').value.trim();
-      const aspectRatio = document.getElementById('aspect-ratio').value;
-      const style = document.getElementById('image-style').value;
-      const performance = document.getElementById('performance-mode').value;
-      const generateBtn = document.getElementById('generate-btn');
-      const displayContainer = document.getElementById('image-display-container');
-
-      if (!prompt) {
-        alert("Please enter an image prompt first!");
-        return;
-      }
-
-      generateBtn.disabled = true;
-      generateBtn.textContent = "⏳ Generating (Fooocus)...";
-      displayContainer.innerHTML = `
-        <div class="image-placeholder">
-          <div class="typing-indicator" style="justify-content: center; margin-bottom: 12px;">
-            <span class="typing-dot" style="width: 10px; height: 10px;"></span>
-            <span class="typing-dot" style="width: 10px; height: 10px;"></span>
-            <span class="typing-dot" style="width: 10px; height: 10px;"></span>
-          </div>
-          <h3>Generating with Fooocus SDXL...</h3>
-          <p>Your local GPU is rendering the image. This usually takes 10 to 30 seconds.</p>
-        </div>
-      `;
-
-      try {
-        const response = await fetch(`${BACKEND_URL}/generate-image`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: prompt,
-            negative_prompt: negativePrompt,
-            aspect_ratio: aspectRatio,
-            style: style,
-            performance: performance
-          })
-        });
-
-        const data = await response.json();
-        if (response.ok && data.image_url) {
-          displayContainer.innerHTML = `
-            <div class="generated-image-card">
-              <img src="${data.image_url}" alt="Generated AI Artwork">
-              <div class="image-card-footer">
-                <span style="font-size: 12px; color: var(--text-secondary);">SDXL Juggernaut</span>
-                <a href="${data.image_url}" download="generated_image.png" class="clear-btn" style="text-decoration: none;">⬇️ Download</a>
-              </div>
-            </div>
-          `;
-        } else {
-          displayContainer.innerHTML = `
-            <div class="image-placeholder">
-              <h3 style="color: var(--accent-red);">⚠️ Generation Error</h3>
-              <p>${data.error || 'Failed to generate image. Ensure Fooocus run.bat is running on port 7865.'}</p>
-            </div>
-          `;
-        }
-      } catch (err) {
-        displayContainer.innerHTML = `
-          <div class="image-placeholder">
-            <h3 style="color: var(--accent-red);">⚠️ Backend Unreachable</h3>
-            <p>Could not connect to ${BACKEND_URL}. Ensure pythoncode.py is running and Fooocus is launched.</p>
-          </div>
-        `;
-      } finally {
-        generateBtn.disabled = false;
-        generateBtn.textContent = "✨ Generate Image";
-      }
-    }
-
-    // Stop only the Fooocus instance launched by this app.
-    async function stopFooocus() {
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/fooocus/stop`, { method: 'POST' });
-        const data = await res.json();
-        alert(data.message || data.error);
-      } catch (err) { alert('Could not contact the backend to stop Fooocus.'); }
-    }
-
-    // -------------------------------------------------------------
-    // SkyReels Video Generation
-    // -------------------------------------------------------------
-    async function generateVideo() {
-      const prompt = document.getElementById('video-prompt').value.trim();
-      const aspectRatio = document.getElementById('video-ratio').value;
-      const duration = document.getElementById('video-duration').value;
-      const apiKey = document.getElementById('skyreels-key').value.trim();
-      const generateBtn = document.getElementById('generate-video-btn');
-      const displayContainer = document.getElementById('video-display-container');
-
-      if (!prompt) {
-        alert("Please enter a video prompt first!");
-        return;
-      }
-
-      generateBtn.disabled = true;
-      generateBtn.textContent = "⏳ Generating (SkyReels)...";
-      displayContainer.innerHTML = `
-        <div class="image-placeholder">
-          <div class="typing-indicator" style="justify-content: center; margin-bottom: 12px;">
-            <span class="typing-dot" style="width: 10px; height: 10px;"></span>
-            <span class="typing-dot" style="width: 10px; height: 10px;"></span>
-            <span class="typing-dot" style="width: 10px; height: 10px;"></span>
-          </div>
-          <h3>Rendering Video with SkyReels...</h3>
-          <p>Processing diffusion transformer frames and temporal motion.</p>
-        </div>
-      `;
-
-      try {
-        const response = await fetch(`${BACKEND_URL}/generate-video`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: prompt,
-            aspect_ratio: aspectRatio,
-            duration: parseInt(duration),
-            api_key: apiKey
-          })
-        });
-
-        const data = await response.json();
-        if (response.ok && data.video_url) {
-          displayContainer.innerHTML = `
-            <div class="generated-image-card">
-              <video src="${data.video_url}" controls autoplay loop style="width: 100%; display: block; border-radius: 8px;"></video>
-              <div class="image-card-footer">
-                <span style="font-size: 12px; color: var(--text-secondary);">SkyReels Video</span>
-                <a href="${data.video_url}" download="generated_video.mp4" class="clear-btn" style="text-decoration: none;">⬇️ Download Video</a>
-              </div>
-            </div>
-          `;
-        } else {
-          displayContainer.innerHTML = `
-            <div class="image-placeholder">
-              <h3 style="color: var(--accent-red);">⚠️ Video Generation Error</h3>
-              <p>${data.error || 'Could not generate video. Verify your SkyReels API key or local model.'}</p>
-            </div>
-          `;
-        }
-      } catch (err) {
-        displayContainer.innerHTML = `
-          <div class="image-placeholder">
-            <h3 style="color: var(--accent-red);">⚠️ Backend Unreachable</h3>
-            <p>Could not connect to ${BACKEND_URL}. Ensure pythoncode.py is running.</p>
-          </div>
-        `;
-      } finally {
-        generateBtn.disabled = false;
-        generateBtn.textContent = "🎬 Generate Video (SkyReels)";
-      }
-    }
-
-    // -------------------------------------------------------------
-    // Server Health & Network Check
-    // -------------------------------------------------------------
     async function checkAllStatuses() {
       const statusPill = document.getElementById('connection-status');
       const statusText = document.getElementById('status-text');
       const backendVal = document.getElementById('backend-status');
       const ollamaVal = document.getElementById('ollama-status');
-      const fooocusVal = document.getElementById('fooocus-status');
       const ipsList = document.getElementById('network-ips-list');
 
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/status`, { method: 'GET' });
-        if (res.ok) {
-          const data = await res.json();
-          statusPill.className = "status-pill";
-          statusText.textContent = "Backend Connected";
-          if (backendVal) backendVal.innerHTML = "<span style='color: var(--accent-green)'>🟢 Online</span>";
-          if (ollamaVal) ollamaVal.innerHTML = data.ollama ? "<span style='color: var(--accent-green)'>🟢 Ready</span>" : "<span style='color: var(--accent-red)'>🔴 Offline</span>";
-          if (fooocusVal) fooocusVal.innerHTML = data.fooocus ? "<span style='color: var(--accent-green)'>🟢 Ready</span>" : "<span style='color: var(--text-muted)'>⚪ Standby</span>";
-
-          if (ipsList && data.network_ips) {
-            let html = `
-              <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">
-                URLs accessible from other devices:
-              </div>
-            `;
-            data.network_ips.forEach(ip => {
-              html += `
-                <div style="background-color: var(--bg-primary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-family: monospace; font-size: 13px;">
-                  🌐 <a href="http://${ip}:5000" target="_blank" style="color: var(--accent-blue); text-decoration: none;">http://${ip}:5000</a>
-                </div>
-              `;
-            });
-            ipsList.innerHTML = html;
-          }
-        } else {
-          throw new Error();
-        }
-      } catch (e) {
-        statusPill.className = "status-pill offline";
-        statusText.textContent = "Backend Offline";
-        if (backendVal) backendVal.innerHTML = "<span style='color: var(--accent-red)'>🔴 Offline</span>";
-        if (ollamaVal) ollamaVal.innerHTML = "<span style='color: var(--text-muted)'>⚪ Unknown</span>";
-        if (fooocusVal) fooocusVal.innerHTML = "<span style='color: var(--text-muted)'>⚪ Unknown</span>";
-      }
+      const data = await (await fetch(`${BACKEND_URL}/api/status`, { method: 'GET' })).json();
+      statusPill.className = "status-pill";
+      statusText.textContent = "Backend Connected";
+      backendVal.innerHTML = "<span style='color: var(--accent-green)'>🟢 Online</span>";
+      ollamaVal.innerHTML = data.ollama ? "<span style='color: var(--accent-green)'>🟢 Ready</span>" : "<span style='color: var(--accent-red)'>🔴 Offline</span>";
+      let html = `
+        <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">
+          URLs accessible from other devices:
+        </div>
+      `;
+      data.network_ips.forEach(ip => {
+        html += `
+          <div style="background-color: var(--bg-primary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-family: monospace; font-size: 13px;">
+            🌐 <a href="http://${ip}:5000" target="_blank" style="color: var(--accent-blue); text-decoration: none;">http://${ip}:5000</a>
+          </div>
+        `;
+      });
+      ipsList.innerHTML = html;
     }
-
     checkAllStatuses();
   </script>
 </body>
