@@ -7,7 +7,6 @@
 </head>
 <body>
 <!-- Should make more User freindly like color settings and stuff -->
-  <!-- Top App Header -->
   <header>
     <div class="logo-area">
       <div class="logo-text">
@@ -15,25 +14,16 @@
       </div>
     </div>
 
-    <!-- Navigation Tabs -->
+    <!-- Tabs -->
     <nav class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('chat')">Chat</button>
-      <button class="tab-btn" onclick="switchTab('settings')">Status</button> <!-- I suppose Ai thought this would be usefull can see it ig-->
+      <button class="tab-btn" onclick="switchTab('settings')">Status</button> <!-- I suppose Ai thought this would be usefull to have a settings page can see it ig-->
     </nav>
-
-    <!-- Connection Status Badge -->
-    <div id="connection-status" class="status-pill offline">
-      <span class="status-dot"></span>
-      <span id="status-text">Checking Server...</span>
-    </div>
   </header>
 
   <!-- Main View Area -->
   <main>
-
-    <!-- ============================================================= -->
-    <!-- TAB 1: OLLAMA CHAT INTERFACE                                  -->
-    <!-- ============================================================= -->
+    <!-- TAB 1: OLLAMA CHAT INTERFACE  -->
     <section id="chat-tab" class="tab-content active" style="display: flex; flex-direction: column; height: 100%;">
       <div class="chat-header-bar">
         <div class="model-selector-group">
@@ -61,9 +51,7 @@
       </div>
     </section>
 
-    <!-- ============================================================= -->
-    <!-- TAB 4: SYSTEM STATUS & NETWORK ACCESS                         -->
-    <!-- ============================================================= -->
+    <!-- TAB 4: SYSTEM  -->
     <section id="settings-tab" class="tab-content">
       <div class="settings-card">
         <h3>Local AI System Status</h3>
@@ -107,9 +95,7 @@
       ? window.location.origin
       : "http://127.0.0.1:5000";
 //crazy
-    // -------------------------------------------------------------
     // Tab Navigation
-    // -------------------------------------------------------------
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => {
@@ -133,9 +119,7 @@
 
     switchTab('chat');
 
-    // -------------------------------------------------------------
     // Chat Functions
-    // -------------------------------------------------------------
     const chatContainer = document.getElementById('chat-container');
     const userInput = document.getElementById('user-input');
     const modelSelect = document.getElementById('model-select');
@@ -154,15 +138,6 @@
       catalogModelSelect.innerHTML = '<option value="">Choose a model to pull...</option>' +
         data.models.map(name => `<option value="${name}">${name}</option>`).join('');
     }
-
-    // Stop only an Ollama server that this web app started itself.
-    async function stopOllama() {
-      const res = await fetch(`${BACKEND_URL}/api/ollama/stop`, { method: 'POST' });
-      const data = await res.json();
-      appendMessage('ai', data.message);
-      refreshModels(); 
-    }
-
     // Start a non-blocking pull and poll until the model is ready.
     async function pullModel() {
       const input = catalogModelSelect;
@@ -170,13 +145,13 @@
       input.disabled = true;
       const res = await fetch(`${BACKEND_URL}/api/models/pull`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({model}) });
       const data = await res.json();
-      appendMessage('ai', `⬇️ Pulling ${model}...`);
+      appendMessage('ai', `⬇Pulling ${model}...`);
       modelRefreshTimer = setInterval(async () => {
         const status = await (await fetch(`${BACKEND_URL}/api/models/pull/${data.job_id}`)).json();
         if (status.progress) console.info(`[Ollama] ${status.progress}`);
         if (status.status === 'done' || status.status === 'failed') {
           clearInterval(modelRefreshTimer); input.disabled = false; input.value = '';
-          appendMessage('ai', status.status === 'done' ? `✅ ${model} is ready.` : `⚠️ Pull failed: ${status.error}`);
+          appendMessage('ai', status.status === 'done' ? `${model} is ready.` : `Pull failed: ${status.error}`);
           if (status.status === 'done') refreshModels();
         }
       }, 1000);
@@ -263,7 +238,6 @@
       userInput.focus();
     }
     //Network Check
-
     async function checkAllStatuses() {
       const statusPill = document.getElementById('connection-status');
       const statusText = document.getElementById('status-text');
@@ -274,8 +248,8 @@
       const data = await (await fetch(`${BACKEND_URL}/api/status`, { method: 'GET' })).json();
       statusPill.className = "status-pill";
       statusText.textContent = "Backend Connected";
-      backendVal.innerHTML = "<span style='color: var(--accent-green)'>🟢 Online</span>";
-      ollamaVal.innerHTML = data.ollama ? "<span style='color: var(--accent-green)'>🟢 Ready</span>" : "<span style='color: var(--accent-red)'>🔴 Offline</span>";
+      backendVal.innerHTML = "<span style='color: var(--accent-green)'>Online</span>";
+      ollamaVal.innerHTML = data.ollama ? "<span style='color: var(--accent-green)'>Ready</span>" : "<span style='color: var(--accent-red)'>Offline</span>";
       let html = `
         <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">
           URLs accessible from other devices:
@@ -292,5 +266,7 @@
     }
     checkAllStatuses();
   </script>
+  <canvas id="myCanvas" width="500" height="400"></canvas>
+    <script src="Background.js"></script>
 </body>
 </html>
