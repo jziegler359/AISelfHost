@@ -22,10 +22,10 @@ Services
 Ollama make sure its installed or the code likes to break
 
 
-# The goal of this project is to make AI localy avalible to everyone with just one decently powerfull device per user group. The goal is to have chatbots images and hopfully eventually agentic work.
+The goal of this project is to make AI localy avalible to everyone with just one decently powerfull device per user group. The goal is to have chatbots images and hopfully eventually agentic work.
 This project hosts a webpage any devices on the same network can accses. Right now there is no memory or images but im working on that and it will hopfully be added later. For the text which is implemented now any ollama model should work and it has built in pulling.
 Eventually I might add model recomendatons and stuff based on pc specs or mabey a benchmark or somthing. Video generation might be possible but It takes a lot of compute unless there is a new model i havent found yet. 
-I also plan to add api support in the future once i have memeory and stuff to make it worthwhile. 
+I also plan to add api support in the future once i have model memeory and stuff to make it worthwhile. 
 
 
 The setup folder is writen by ai so it hopfully will work for you for now but i plan to rewrite it by hand when i have some time.
