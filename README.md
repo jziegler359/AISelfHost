@@ -1,33 +1,24 @@
 Self-hosted web interface for local AI services.
 Requirements
-------------
 
 - Windows, Linux, or macOS
 - Python 3.10+
 - Ollama installed and available on `PATH`
 
 Start
------
-
    just run in a terminal of some sort python start_webpage.py 
-    if it throws an error about missing librays try pip install (libray name here)
+   if it throws an error about missing librays try pip install (libray name here)
 
 Access from another device on Windows
---------------------------------------
 
 1. Start the server and use the LAN address printed in the terminal, for example
-   http://10.0.0.5:5000. Do not use localhost or 127.0.0.1 on the other device.
-2. Allow Python through Windows Defender Firewall when Windows asks. If no prompt
-   appears, create an inbound TCP rule for port 5000 in Windows Defender Firewall
-   with Advanced Security, or run PowerShell as Administrator and use:
-
+   http://10.0.0.(deviceip):5000.
+2. Allow Python through Windows Defender Firewall when Windows asks. Create an inbound TCP rule for port 5000 in Windows Defender Firewall or use:
    New-NetFirewallRule -DisplayName "Ollama Web UI" -Direction Inbound -Protocol TCP -LocalPort 5000 -Action Allow -Profile Private
-
-3. Both devices must be on the same Wi-Fi/LAN. Guest Wi-Fi and AP/client
-   isolation commonly block device-to-device connections.
+3. Both devices must be on the same Wi-Fi/LAN. 
 
 Services
---------
+
 Ollama make sure its installed or the code likes to break
 
 
@@ -39,14 +30,21 @@ I also plan to add api support in the future once i have memeory and stuff to ma
 
 The setup folder is writen by ai so it hopfully will work for you for now but i plan to rewrite it by hand when i have some time.
 
-Also i will make it look better soon sry for the eyesore 
+There are now two animated backgrounds to chose between rainy moutains and prarie grain silo with more to come some based on weeks themes for Tera. 
 
 Very helpfull website: https://docs.ollama.com/
 
 Also if it seems like its doing nothing with bigger models just give it a while ill try to add loading or thinking later
 Also make sure to allow incoming on port 5000 on your host machine
 
-DEMO
+Future plans:
+Full project will have to be moved over to linux for now, should create file sharing and jellyfin/samba for file sharing. There is a tag to open other websites in html apprently the <iframe src="https://example.com" width="600" height="400" title="Example Website"></iframe> This should allow it to open a jellyfin page inside of the page that the main site is running in
+Local image generation is still to come hopfully. 
+gogle calendar intergration or goggler calendar acses from inside of app.
+forest with river animation to come in next weeks.
+New backgrounds based on themes of coming weeks. 
+The goal is to make this project a full smart home OS instead of just a ai interface now.
 
-If you dont want to download all of this code and setup ollama and stuff this video shows the website being demonstrated:
-https://youtu.be/Rx8isvz-j5c
+How this was made: 
+Week 1: Created backend and simply had chatbot interface and pulling.
+Week 2: Created 2 animated backgrounds so website is slightly visually appealing to look at.
