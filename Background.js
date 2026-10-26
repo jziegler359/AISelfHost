@@ -72,23 +72,27 @@ window.addEventListener('mousemove', (event) => {
 
 ctx.font = "30px Arial" // text setup
 
+TX = 100
+
+move = true
+still = 0
+Sx = -500
 function drawBackground() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   
   ctx.fillStyle = '#BCE8FA';
   ctx.fillRect(0, 0, canvas.width, canvas.height); //Draw Background first 
-  quad(1500,0,1500,100,2000,100,2000,0,"white")
+  quad(1700,0,1700,100,2000,100,2000,0,"white")
   ctx.fillStyle = "#000000";
-  ctx.fillText("Click to toggle background", 1530, 50);
-  if (background == 1){
+  ctx.fillText("Click to toggle background", 1750, 50);
+  if (background == 2){
 
     //Mountains
     Triangle(0,1000,600,15,1200,1000,'#A9A9A9')
     Triangle(500,1000,1250,200,2000,1000,'#36454F')
     Triangle(-500,1000,250,75,1000,1000,'#D3D3D3')
     Triangle(1000,1000,2000,300,3000,1000,'#708090 ')
-
     i=0
     x=10
     y=600
@@ -119,7 +123,7 @@ function drawBackground() {
       i = i + 1
     }
   }
-  else if (background == 2){
+  else if (background == 1){
     //Background 2 is the grain elevator i made
     //need to make way to swtichj backgorunds and texture grass
     circle(0,0,250,"#FFED29") // sun
@@ -148,6 +152,36 @@ function drawBackground() {
       cx[i] = cx[i]+sc[i]/2
       i=i+1
     } 
+        //section for train
+    circle(TX,475,50,"#9B7653")
+    circle(TX-300,475,50,"#9B7653")
+    quad(TX-300,475,TX,475,TX,300,TX-300,300,"#AAA9AD ")
+    if(move){
+      TX = TX +3
+    }
+    if(TX == 1225+50||TX == 1225+51||TX == 1225+52){
+      move = false
+      still = still +1 //This is the state while parked to load up you can change the rate it increases at to make the park slower or longer
+    }
+    if(still>300|| !(TX == 1225+50||TX == 1225+51||TX == 1225+52)){
+      move = true
+      still = 0
+    }
+    //Steam random sometimes
+    rand = Math.random()
+    if(TX>300){
+      Sx = TX
+    }
+    if(TX<700 & TX>300){
+      i = 0
+      while(i<(TX-300)/4){
+        cloud(300+(i*4),275,"#100c0802") ///Augh why wont this work,Want random to work but refusses might need set distance plus some randomness well i suppose 2 hours left to fix this as well as to make grain flow out of chutes okay ditanced based plus minus some random number from that set distance mabety it should just be on the left side of the screen plus minust 500, rand/2 -0.5 *2 then * 500 
+        i=i+1 //Okay this logic kinda works but isint great 
+      }
+    } 
+    if(TX>2500){
+      TX = -300 // back to start logic
+    }
     //copy and paste cloud logic execpt slower speed 
     quad(600,800,600,350,750,350,750,800,"#7d9196 ")
     quad(750,800,750,150,1000,150,1000,800,"#7e9ca3") //Main building structures 
@@ -161,25 +195,23 @@ function drawBackground() {
     // Okay now extras
     quad(1150,350,1225,400,1225,450,1150,400,"#462b2b")//Chute
     quad(800,800,800,600,950,600,950,800,"#000000") //Door
-    quad(800,800,800,1000,950,1000,950,800,"#9B7653")
+    quad(800,800,800,1000,950,1000,950,800,"#9B7653") //Path
   }
   requestAnimationFrame(drawBackground);
-  if(mouseX >1499 & mouseY< 100){
-  if (isMouseDown){
-    if (canTogle == 1){
-      canTogle = 0
-      if(background == 1){
-        background = 2
-      }else{
-        background =1
+  if(mouseX >1699 & mouseY< 100){
+    if (isMouseDown){
+      if (canTogle == 1){
+        canTogle = 0
+        if(background == 1){
+          background = 2
+        }else{
+          background =1
+        }
       }
+    }else{
+      canTogle = 1
     }
-  }else{
-    canTogle = 1
   }
-}
-  //Now just need to make a button to toggle bbetween the 2 diffrent backgrounds 
-  //also need to toogle rain eITHER KEYS or buttons
 }
 
 drawBackground();
